@@ -10,6 +10,8 @@ import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.bugfender.sdk.Bugfender;
+
 import java.util.Locale;
 
 public class AlarmReceiver extends BroadcastReceiver {
@@ -19,6 +21,7 @@ public class AlarmReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.d(TAG, "onReceive: called ");
+        Bugfender.d(TAG, "onReceive: called");
 
         MediaPlayer mediaPlayer = MediaPlayer.create(context, R.raw.golden_minute);
         mediaPlayer.start();

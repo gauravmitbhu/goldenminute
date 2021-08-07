@@ -15,6 +15,8 @@ import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.widget.TextView;
 
+import com.bugfender.sdk.Bugfender;
+
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -27,6 +29,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Bugfender.d(TAG, "onCreate");
 
         GoldenAlarm gd = new GoldenAlarm();
 
