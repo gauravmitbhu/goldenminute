@@ -1,4 +1,4 @@
-package in.gingermind.goldenhour;
+package in.mittal.goldenhour;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -6,13 +6,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
-import android.speech.tts.TextToSpeech;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.bugfender.sdk.Bugfender;
-
-import java.util.Locale;
 
 public class AlarmReceiver extends BroadcastReceiver {
     private static final String TAG = "ALARMRECEIVER";

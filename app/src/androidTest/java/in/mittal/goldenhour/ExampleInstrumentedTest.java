@@ -1,4 +1,4 @@
-package in.gingermind.goldenhour;
+package in.mittal.goldenhour;
 
 import android.content.Context;
 

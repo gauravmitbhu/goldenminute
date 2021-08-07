@@ -1,6 +1,5 @@
-package in.gingermind.goldenhour;
+package in.mittal.goldenhour;
 
-import android.os.SystemClock;
 import android.util.Log;
 
 import java.text.SimpleDateFormat;
