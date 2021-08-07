@@ -8,9 +8,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.bugfender.sdk.Bugfender;
+import com.github.javiersantos.appupdater.AppUpdater;
+import com.github.javiersantos.appupdater.AppUpdaterUtils;
+import com.github.javiersantos.appupdater.enums.AppUpdaterError;
+import com.github.javiersantos.appupdater.enums.UpdateFrom;
+import com.github.javiersantos.appupdater.objects.Update;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -22,7 +28,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Bugfender.d(TAG, "onCreate");
+        Bugfender.d(TAG, "onCreate: calling updater.");
+        AppUpdater appUpdater = new AppUpdater(this).setUpdateFrom(UpdateFrom.GITHUB)
+                .setGitHubUserAndRepo("gauravmitbhu", "goldenminute");
+        appUpdater.start();
 
         GoldenAlarm gd = new GoldenAlarm();
 
