@@ -10,6 +10,9 @@ import android.util.Log;
 
 import com.bugfender.sdk.Bugfender;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class AlarmReceiver extends BroadcastReceiver {
     private static final String TAG = "ALARMRECEIVER";
     int loop=0;
@@ -24,20 +27,34 @@ public class AlarmReceiver extends BroadcastReceiver {
         mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mediaPlayer) {
+                Log.d(TAG,"onCompletion: loop:"+loop);
                 loop++;
                 if(loop<7){
+                    long yourmilliseconds = System.currentTimeMillis();
+                    SimpleDateFormat sdf = new SimpleDateFormat("MMM dd,yyyy HH:mm");
+                    Date resultdate = new Date(yourmilliseconds);
+                    Log.d(TAG,"onCompletion: starting mediaplayer at time:"+sdf.format(resultdate));
+
                     mediaPlayer.start();
                 }
                 else {
-                    GoldenAlarm gd = new GoldenAlarm();
-                    AlarmManager alarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-                    Intent i = new Intent(context, AlarmReceiver.class);
-                    PendingIntent alarmIntent = PendingIntent.getBroadcast(context, 0, i,
-                            PendingIntent.FLAG_CANCEL_CURRENT);
-                    alarmMgr.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, gd.getTomorrowAlarmTimeInMillis()
-                            + 5 * 1000, alarmIntent);
+                    Log.d(TAG,"loop ended successfully with loop value:"+loop);
                 }
             }
         });
+
+        Log.d(TAG,"now setting next alarm time..");
+        GoldenAlarm gd = new GoldenAlarm();
+        AlarmManager alarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Intent i = new Intent(context, AlarmReceiver.class);
+        PendingIntent alarmIntent = PendingIntent.getBroadcast(context, 0, i,
+                PendingIntent.FLAG_CANCEL_CURRENT);
+        long nextAlarmTimeMillis = gd.getAlarmTimeFromGoldenMinuteMillis(gd.getTomorrowGoldenMinuteTimeInMillis());
+        alarmMgr.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, nextAlarmTimeMillis, alarmIntent);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("MMM dd,yyyy HH:mm");
+        Date resultdate = new Date(nextAlarmTimeMillis);
+        Log.d(TAG,"onReceive: next alarm time :"+sdf.format(resultdate));
+        Log.d(TAG,"onreceive: alarm set. see you tomorrow.");
     }
 }

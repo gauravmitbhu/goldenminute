@@ -4,6 +4,7 @@ import android.util.Log;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 public class GoldenAlarm {
 
@@ -11,17 +12,17 @@ public class GoldenAlarm {
 
     public GoldenAlarm(){}
 
-    public long getNextAlarmTimeInMillis(){
-        long nextAlarmTimeMillis = getTodayAlarmTimeInMillis();
+    public long getNextGoldenMinuteTimeInMillis(){
+        long nextAlarmTimeMillis = getTodayGoldenMinuteTimeInMillis();
 
         if(nextAlarmTimeMillis< System.currentTimeMillis()){
-            nextAlarmTimeMillis = getTomorrowAlarmTimeInMillis();
+            nextAlarmTimeMillis = getTomorrowGoldenMinuteTimeInMillis();
         }
 
         return nextAlarmTimeMillis;
     }
 
-    private long getTodayAlarmTimeInMillis(){
+    private long getTodayGoldenMinuteTimeInMillis(){
         Calendar calendar =  Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         int day = calendar.get(Calendar.DAY_OF_MONTH);
@@ -44,7 +45,7 @@ public class GoldenAlarm {
         return calendar.getTimeInMillis();
     }
 
-    public long getTomorrowAlarmTimeInMillis(){
+    public long getTomorrowGoldenMinuteTimeInMillis(){
         Calendar calendar =  Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         int day = calendar.get(Calendar.DAY_OF_MONTH);
@@ -70,10 +71,19 @@ public class GoldenAlarm {
         return calendar.getTimeInMillis();
     }
 
-    public String getNextAlarmTimeInText() {
-        long millis = getNextAlarmTimeInMillis();
+    public String getNextGoldenMinuteTimeInText() {
+        long millis = getNextGoldenMinuteTimeInMillis();
         String dateFormat = "hh:mm";
         SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);
         return formatter.format(millis);
+    }
+
+    public long getAlarmTimeFromGoldenMinuteMillis(long goldenMinuteMillis){
+        long alarmMillis;
+
+        alarmMillis = goldenMinuteMillis;
+        alarmMillis = alarmMillis - 60*1000;
+
+        return alarmMillis;
     }
 }

@@ -6,17 +6,17 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.PowerManager;
+import android.provider.Settings;
 import android.speech.tts.TextToSpeech;
-import android.util.Log;
 import android.widget.TextView;
 
 import com.bugfender.sdk.Bugfender;
 import com.github.javiersantos.appupdater.AppUpdater;
-import com.github.javiersantos.appupdater.AppUpdaterUtils;
-import com.github.javiersantos.appupdater.enums.AppUpdaterError;
 import com.github.javiersantos.appupdater.enums.UpdateFrom;
-import com.github.javiersantos.appupdater.objects.Update;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,9 +33,20 @@ public class MainActivity extends AppCompatActivity {
                 .setGitHubUserAndRepo("gauravmitbhu", "goldenminute");
         appUpdater.start();
 
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            Intent intent = new Intent();
+            String packageName = getPackageName();
+            PowerManager pm = (PowerManager) getSystemService(POWER_SERVICE);
+            if (!pm.isIgnoringBatteryOptimizations(packageName)) {
+                intent.setAction(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
+                intent.setData(Uri.parse("package:" + packageName));
+                startActivity(intent);
+            }
+        }
+
         GoldenAlarm gd = new GoldenAlarm();
 
-        String time_string = gd.getNextAlarmTimeInText();
+        String time_string = gd.getNextGoldenMinuteTimeInText();
         TextView alarmTimeTextView = (TextView) findViewById(R.id.alarmTimeTextView);
         alarmTimeTextView.setText(time_string);
 
@@ -44,7 +55,8 @@ public class MainActivity extends AppCompatActivity {
         Intent i = new Intent(context, AlarmReceiver.class);
         PendingIntent alarmIntent = PendingIntent.getBroadcast(context, 0, i,
                 PendingIntent.FLAG_CANCEL_CURRENT);
-        alarmMgr.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, gd.getNextAlarmTimeInMillis()
+        alarmMgr.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,
+                gd.getAlarmTimeFromGoldenMinuteMillis(gd.getNextGoldenMinuteTimeInMillis())
                + 5 * 1000, alarmIntent);
         //alarmMgr.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+5*1000
           //    , alarmIntent);
