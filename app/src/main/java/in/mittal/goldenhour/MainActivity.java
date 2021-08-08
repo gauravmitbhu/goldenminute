@@ -12,11 +12,15 @@ import android.os.Bundle;
 import android.os.PowerManager;
 import android.provider.Settings;
 import android.speech.tts.TextToSpeech;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.bugfender.sdk.Bugfender;
 import com.github.javiersantos.appupdater.AppUpdater;
 import com.github.javiersantos.appupdater.enums.UpdateFrom;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -55,10 +59,15 @@ public class MainActivity extends AppCompatActivity {
         Intent i = new Intent(context, AlarmReceiver.class);
         PendingIntent alarmIntent = PendingIntent.getBroadcast(context, 0, i,
                 PendingIntent.FLAG_CANCEL_CURRENT);
-        alarmMgr.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,
-                gd.getAlarmTimeFromGoldenMinuteMillis(gd.getNextGoldenMinuteTimeInMillis())
-               + 5 * 1000, alarmIntent);
+
+        long nextAlarmTimeMillis= gd.getAlarmTimeFromGoldenMinuteMillis(gd.getNextGoldenMinuteTimeInMillis());
+        alarmMgr.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, nextAlarmTimeMillis, alarmIntent);
         //alarmMgr.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+5*1000
           //    , alarmIntent);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("MMM dd,yyyy HH:mm");
+        Date resultdate = new Date(nextAlarmTimeMillis);
+        Log.d(TAG,"next alarm time :"+sdf.format(resultdate));
+        Log.d(TAG,"alarm set. see you tomorrow.");
     }
 }
